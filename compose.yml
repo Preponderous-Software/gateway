@@ -81,6 +81,27 @@ services:
       # Add middleware for HTTP to HTTPS redirect
       - "traefik.http.routers.app1.middlewares=redirect-to-https@file"
 
+  # Preponderous Website
+  preponderous-website:
+    build: ./services/preponderous-website
+    container_name: preponderous-website
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      # HTTP Route
+      - "traefik.http.routers.preponderous-website.rule=Host(`preponderous.localhost`)"
+      - "traefik.http.routers.preponderous-website.entrypoints=web"
+      # HTTPS Route with TLS
+      - "traefik.http.routers.preponderous-website-secure.rule=Host(`preponderous.localhost`)"
+      - "traefik.http.routers.preponderous-website-secure.entrypoints=websecure"
+      - "traefik.http.routers.preponderous-website-secure.tls=true"
+      # Service port (using port 8080 as detected in the Dockerfile)
+      - "traefik.http.services.preponderous-website.loadbalancer.server.port=8080"
+      # Add middleware for HTTP to HTTPS redirect
+      - "traefik.http.routers.preponderous-website.middlewares=redirect-to-https@file"
+
 networks:
   traefik-network:
     name: traefik-network

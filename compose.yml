@@ -19,7 +19,7 @@ services:
       # Traefik static configuration
       - ./config/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       # Dynamic configuration
-      - ./config/traefik./dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./config/traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
       # Let's Encrypt certificates
       - ./config/ssl/acme.json:/acme.json
     networks:

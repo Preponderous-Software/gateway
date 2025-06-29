@@ -1,3 +1,9 @@
+[submodule "services/preponderous-website"]
+	path = services/preponderous-website
+	url = https://github.com/Preponderous-Software/preponderous-website
+[submodule "services/dpc-website"]
+	path = services/dpc-website
+	url = https://github.com/Dans-Plugins/dpc-website
 [submodule "services/dpc-mc-server"]
 	path = services/dpc-mc-server
 	url = https://github.com/Dans-Plugins/dpc-mc-server

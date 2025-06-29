@@ -81,6 +81,48 @@ services:
       # Add middleware for HTTP to HTTPS redirect
       - "traefik.http.routers.app1.middlewares=redirect-to-https@file"
 
+  # Preponderous Website
+  preponderous-website:
+    build: ./services/preponderous-website
+    container_name: preponderous-website
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      # HTTP Route
+      - "traefik.http.routers.preponderous-website.rule=Host(`preponderous.localhost`)"
+      - "traefik.http.routers.preponderous-website.entrypoints=web"
+      # HTTPS Route with TLS
+      - "traefik.http.routers.preponderous-website-secure.rule=Host(`preponderous.localhost`)"
+      - "traefik.http.routers.preponderous-website-secure.entrypoints=websecure"
+      - "traefik.http.routers.preponderous-website-secure.tls=true"
+      # Service port (using port 8080 as detected in the Dockerfile)
+      - "traefik.http.services.preponderous-website.loadbalancer.server.port=8080"
+      # Add middleware for HTTP to HTTPS redirect
+      - "traefik.http.routers.preponderous-website.middlewares=redirect-to-https@file"
+
+  # Dans Plugins Central Website
+  dpc-website:
+    build: ./services/dpc-website
+    container_name: dpc-website
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      # HTTP Route
+      - "traefik.http.routers.dpc-website.rule=Host(`dansplugins.localhost`)"
+      - "traefik.http.routers.dpc-website.entrypoints=web"
+      # HTTPS Route with TLS
+      - "traefik.http.routers.dpc-website-secure.rule=Host(`dansplugins.localhost`)"
+      - "traefik.http.routers.dpc-website-secure.entrypoints=websecure"
+      - "traefik.http.routers.dpc-website-secure.tls=true"
+      # Service port (assuming the Next.js app runs on port 3000 internally)
+      - "traefik.http.services.dpc-website.loadbalancer.server.port=3000"
+      # Add middleware for HTTP to HTTPS redirect
+      - "traefik.http.routers.dpc-website.middlewares=redirect-to-https@file"
+
   dpcmcserver:
     build: ./services/dpc-mc-server
     image: dpc-mc-server

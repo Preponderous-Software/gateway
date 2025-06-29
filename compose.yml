@@ -62,7 +62,7 @@ services:
 
   # App1 - Custom Application
   app1:
-    build: ./app1
+    build: ./services/app1
     container_name: app1
     restart: unless-stopped
     networks:

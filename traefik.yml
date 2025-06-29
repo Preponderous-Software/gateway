@@ -1,0 +1,59 @@
+# Static configuration file for Traefik
+
+# Global settings
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+# API and dashboard configuration
+api:
+  dashboard: true
+  insecure: false  # Dashboard is secured with HTTPS
+
+# Entry points configuration
+entryPoints:
+  # HTTP entry point
+  web:
+    address: ":80"
+    # Redirect HTTP to HTTPS globally (can be overridden per router)
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  # HTTPS entry point
+  websecure:
+    address: ":443"
+
+# Certificate resolvers configuration (Let's Encrypt)
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: your-email@example.com  # Replace with your email
+      storage: acme.json
+      tlsChallenge: {}  # Using TLS-ALPN challenge
+      # For testing, uncomment the following to use the staging server
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+
+# Provider configuration
+providers:
+  # Docker provider to auto-discover containers
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false  # Only expose containers with traefik.enable=true
+    network: traefik-network  # Default network to use for connections
+
+  # File provider for dynamic configuration
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true  # Auto-reload when file changes
+
+# Log configuration
+log:
+  level: INFO  # DEBUG, INFO, WARN, ERROR, FATAL
+
+# Access logs
+accessLog:
+  filePath: /var/log/traefik/access.log
+  bufferingSize: 100

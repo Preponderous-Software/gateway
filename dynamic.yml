@@ -1,0 +1,44 @@
+# Dynamic configuration file for Traefik
+
+# HTTP Configuration
+http:
+  # Global HTTP middleware settings
+  middlewares:
+    # Middleware for redirecting HTTP to HTTPS
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+    # Middleware for adding security headers
+    secure-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+
+    # Middleware for basic authentication (optional)
+    basic-auth:
+      basicAuth:
+        users:
+          # Generated with htpasswd -nb user password
+          # Replace with your own credentials
+          - "user:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/"
+
+# TLS options
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      cipherSuites:
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+        - TLS_AES_128_GCM_SHA256
+        - TLS_AES_256_GCM_SHA384
+        - TLS_CHACHA20_POLY1305_SHA256

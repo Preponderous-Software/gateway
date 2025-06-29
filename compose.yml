@@ -13,15 +13,13 @@ services:
       - "80:80"
       # HTTPS
       - "443:443"
-      # Dashboard
-      - "8080:8080"
     volumes:
       # Docker socket to communicate with Docker daemon
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Traefik static configuration
       - ./config/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       # Dynamic configuration
-      - ./config/traefik./dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./config/traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
       # Let's Encrypt certificates
       - ./config/ssl/acme.json:/acme.json
     networks:

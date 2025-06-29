@@ -1,0 +1,3 @@
+[submodule "services/dpc-website"]
+	path = services/dpc-website
+	url = https://github.com/Dans-Plugins/dpc-website

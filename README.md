@@ -7,10 +7,13 @@ A microservices gateway infrastructure using Traefik for routing and service dis
 - Example services ready for customization
 
 ## Project Structure
-- **Traefik**: Central reverse proxy that handles routing, load balancing, and SSL termination
-- **App1**: Sample microservice application
-- **Whoami**: Simple diagnostic service for testing the infrastructure
-
+- **config/**: Configuration files
+   - **traefik/**: Traefik configuration files
+   - **ssl/**: SSL certificates and related files
+- **services/**: Microservices
+   - **app1/**: Sample microservice application
+   - **whoami/**: Simple diagnostic service
+- **compose.yml**: Main Docker Compose configuration
 ## Requirements
 - Docker and Docker Compose
 - Git
@@ -22,10 +25,9 @@ A microservices gateway infrastructure using Traefik for routing and service dis
    git clone https://github.com/preponderous-software/gateway.git
    cd gateway
 ```
-1. Create an empty file for SSL certificates and set proper permissions: `acme.json`
+1. Create an empty file for SSL certificates and set proper permissions
 ``` 
-   touch acme.json
-   chmod 600 acme.json
+   mkdir -p config/ssl touch config/ssl/acme.json chmod 600 config/ssl/acme.json
 ```
 ### Running Locally
 1. Start the entire stack with Docker Compose:
@@ -44,9 +46,9 @@ To modify or add services:
 3. Build and deploy using Docker Compose
 
 ## Configuration
-- : Main Traefik configuration `traefik.yml`
-- : Dynamic Traefik configuration for middleware, etc. `dynamic.yml`
-- : Docker Compose service definitions `compose.yml`
+- `config/traefik/traefik.yml`: Main Traefik configuration
+- `config/traefik/dynamic.yml`: Dynamic Traefik configuration for middleware, etc.
+- `compose.yml`: Docker Compose service definitions
 
 ## Adding a New Service
 1. Create a new directory for your service

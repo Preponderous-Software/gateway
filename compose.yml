@@ -19,11 +19,11 @@ services:
       # Docker socket to communicate with Docker daemon
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Traefik static configuration
-      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./config/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       # Dynamic configuration
-      - ./dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./config/traefik./dynamic.yml:/etc/traefik/dynamic.yml:ro
       # Let's Encrypt certificates
-      - ./acme.json:/acme.json
+      - ./config/ssl/acme.json:/acme.json
     networks:
       - traefik-network
     labels:

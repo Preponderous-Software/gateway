@@ -10,9 +10,9 @@ services:
       - no-new-privileges:true
     ports:
       # HTTP
-      - "80:80"
+      - "${HTTP_PORT:-80}:80"
       # HTTPS
-      - "443:443"
+      - "${HTTPS_PORT:-443}:443"
     volumes:
       # Docker socket to communicate with Docker daemon
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -28,16 +28,18 @@ services:
       # Enable Docker provider
       - "traefik.enable=true"
       # Dashboard Service - HTTP Routing
-      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`${TRAEFIK_DASHBOARD_HOST:-traefik.localhost}`)"
       - "traefik.http.routers.traefik-dashboard.service=api@internal"
       - "traefik.http.routers.traefik-dashboard.entrypoints=web"
       # Secure Dashboard - HTTPS Routing with TLS
-      - "traefik.http.routers.traefik-dashboard-secure.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik-dashboard-secure.rule=Host(`${TRAEFIK_DASHBOARD_HOST:-traefik.localhost}`)"
       - "traefik.http.routers.traefik-dashboard-secure.service=api@internal"
       - "traefik.http.routers.traefik-dashboard-secure.entrypoints=websecure"
       - "traefik.http.routers.traefik-dashboard-secure.tls=true"
       # Dashboard port
       - "traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080"
+    environment:
+      - ACME_EMAIL=${ACME_EMAIL:-your-email@example.com}
 
   # Whoami - Example Service
   whoami:
@@ -49,10 +51,10 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Route
-      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.rule=Host(`${WHOAMI_HOST:-whoami.localhost}`)"
       - "traefik.http.routers.whoami.entrypoints=web"
       # HTTPS Route with TLS
-      - "traefik.http.routers.whoami-secure.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami-secure.rule=Host(`${WHOAMI_HOST:-whoami.localhost}`)"
       - "traefik.http.routers.whoami-secure.entrypoints=websecure"
       - "traefik.http.routers.whoami-secure.tls=true"
       # Service port
@@ -68,10 +70,10 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Route
-      - "traefik.http.routers.app1.rule=Host(`app1.localhost`)"
+      - "traefik.http.routers.app1.rule=Host(`${APP1_HOST:-app1.localhost}`)"
       - "traefik.http.routers.app1.entrypoints=web"
       # HTTPS Route with TLS
-      - "traefik.http.routers.app1-secure.rule=Host(`app1.localhost`)"
+      - "traefik.http.routers.app1-secure.rule=Host(`${APP1_HOST:-app1.localhost}`)"
       - "traefik.http.routers.app1-secure.entrypoints=websecure"
       - "traefik.http.routers.app1-secure.tls=true"
       # Service port (assuming app1 runs on port 8000 internally)
@@ -89,10 +91,10 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Route
-      - "traefik.http.routers.preponderous-website.rule=Host(`preponderous.localhost`)"
+      - "traefik.http.routers.preponderous-website.rule=Host(`${PREPONDEROUS_HOST:-preponderous.localhost}`)"
       - "traefik.http.routers.preponderous-website.entrypoints=web"
       # HTTPS Route with TLS
-      - "traefik.http.routers.preponderous-website-secure.rule=Host(`preponderous.localhost`)"
+      - "traefik.http.routers.preponderous-website-secure.rule=Host(`${PREPONDEROUS_HOST:-preponderous.localhost}`)"
       - "traefik.http.routers.preponderous-website-secure.entrypoints=websecure"
       - "traefik.http.routers.preponderous-website-secure.tls=true"
       # Service port (using port 8080 as detected in the Dockerfile)
@@ -110,10 +112,10 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Route
-      - "traefik.http.routers.dpc-website.rule=Host(`dansplugins.localhost`)"
+      - "traefik.http.routers.dpc-website.rule=Host(`${DPC_HOST:-dansplugins.localhost}`)"
       - "traefik.http.routers.dpc-website.entrypoints=web"
       # HTTPS Route with TLS
-      - "traefik.http.routers.dpc-website-secure.rule=Host(`dansplugins.localhost`)"
+      - "traefik.http.routers.dpc-website-secure.rule=Host(`${DPC_HOST:-dansplugins.localhost}`)"
       - "traefik.http.routers.dpc-website-secure.entrypoints=websecure"
       - "traefik.http.routers.dpc-website-secure.tls=true"
       # Service port (assuming the Next.js app runs on port 3000 internally)
@@ -140,44 +142,44 @@ services:
         source: ./deposit-box
         target: /deposit-box
     environment:
-      - MINECRAFT_VERSION=1.21.4
-      - OPERATOR_UUID=0a9fa342-3139-49d7-8acb-fcf4d9c1f0ef
-      - OPERATOR_NAME=DanTheTechMan
-      - OPERATOR_LEVEL=4
-      - OVERWRITE_EXISTING_SERVER=false
-      - ACTIVITY_TRACKER_ENABLED=true
-      - ALTERNATE_ACCOUNT_FINDER_ENABLED=true
-      - CURRENCIES_ENABLED=true
-      - DANS_ESSENTIALS_ENABLED=true
-      - DANS_SET_HOME_ENABLED=true
-      - DANS_SPAWN_SYSTEM_ENABLED=true
-      - FIEFS_ENABLED=false
-      - FOOD_SPOILAGE_ENABLED=true
-      - MAILBOXES_ENABLED=true
-      - MEDIEVAL_ECONOMY_ENABLED=false
-      - MEDIEVAL_FACTIONS_ENABLED=true
-      - MEDIEVAL_ROLEPLAY_ENGINE_ENABLED=true
-      - MORE_RECIPES_ENABLED=true
-      - NETHER_ACCESS_CONTROLLER_ENABLED=true
-      - NO_MORE_CREEPERS_ENABLED=true
-      - PLAYER_LORE_ENABLED=true
-      - SIMPLE_SKILLS_ENABLED=true
-      - WILD_PETS_ENABLED=true
-      - BLUEMAP_ENABLED=false
-      - DYNMAP_ENABLED=true
-      - PLACEHOLDER_API_ENABLED=true
-      - VIA_BACKWARDS_ENABLED=true
-      - VIA_VERSION_ENABLED=true
+      - MINECRAFT_VERSION=${MINECRAFT_VERSION:-1.21.4}
+      - OPERATOR_UUID=${OPERATOR_UUID:-0a9fa342-3139-49d7-8acb-fcf4d9c1f0ef}
+      - OPERATOR_NAME=${OPERATOR_NAME:-DanTheTechMan}
+      - OPERATOR_LEVEL=${OPERATOR_LEVEL:-4}
+      - OVERWRITE_EXISTING_SERVER=${OVERWRITE_EXISTING_SERVER:-false}
+      - ACTIVITY_TRACKER_ENABLED=${ACTIVITY_TRACKER_ENABLED:-true}
+      - ALTERNATE_ACCOUNT_FINDER_ENABLED=${ALTERNATE_ACCOUNT_FINDER_ENABLED:-true}
+      - CURRENCIES_ENABLED=${CURRENCIES_ENABLED:-true}
+      - DANS_ESSENTIALS_ENABLED=${DANS_ESSENTIALS_ENABLED:-true}
+      - DANS_SET_HOME_ENABLED=${DANS_SET_HOME_ENABLED:-true}
+      - DANS_SPAWN_SYSTEM_ENABLED=${DANS_SPAWN_SYSTEM_ENABLED:-true}
+      - FIEFS_ENABLED=${FIEFS_ENABLED:-false}
+      - FOOD_SPOILAGE_ENABLED=${FOOD_SPOILAGE_ENABLED:-true}
+      - MAILBOXES_ENABLED=${MAILBOXES_ENABLED:-true}
+      - MEDIEVAL_ECONOMY_ENABLED=${MEDIEVAL_ECONOMY_ENABLED:-false}
+      - MEDIEVAL_FACTIONS_ENABLED=${MEDIEVAL_FACTIONS_ENABLED:-true}
+      - MEDIEVAL_ROLEPLAY_ENGINE_ENABLED=${MEDIEVAL_ROLEPLAY_ENGINE_ENABLED:-true}
+      - MORE_RECIPES_ENABLED=${MORE_RECIPES_ENABLED:-true}
+      - NETHER_ACCESS_CONTROLLER_ENABLED=${NETHER_ACCESS_CONTROLLER_ENABLED:-true}
+      - NO_MORE_CREEPERS_ENABLED=${NO_MORE_CREEPERS_ENABLED:-true}
+      - PLAYER_LORE_ENABLED=${PLAYER_LORE_ENABLED:-true}
+      - SIMPLE_SKILLS_ENABLED=${SIMPLE_SKILLS_ENABLED:-true}
+      - WILD_PETS_ENABLED=${WILD_PETS_ENABLED:-true}
+      - BLUEMAP_ENABLED=${BLUEMAP_ENABLED:-false}
+      - DYNMAP_ENABLED=${DYNMAP_ENABLED:-true}
+      - PLACEHOLDER_API_ENABLED=${PLACEHOLDER_API_ENABLED:-true}
+      - VIA_BACKWARDS_ENABLED=${VIA_BACKWARDS_ENABLED:-true}
+      - VIA_VERSION_ENABLED=${VIA_VERSION_ENABLED:-true}
     labels:
       - "traefik.enable=true"
       # Dynmap web interface configuration (port 8123)
-      - "traefik.http.routers.dynmap.rule=Host(`dynmap.yourdomain.com`)"
+      - "traefik.http.routers.dynmap.rule=Host(`${DYNMAP_HOST:-dynmap.mc.dansplugins.localhost}`)"
       - "traefik.http.routers.dynmap.entrypoints=websecure"
       - "traefik.http.routers.dynmap.tls.certresolver=letsencrypt"
       - "traefik.http.services.dynmap.loadbalancer.server.port=8123"
 
       # BlueMap web interface configuration (port 8100)
-      - "traefik.http.routers.bluemap.rule=Host(`bluemap.yourdomain.com`)"
+      - "traefik.http.routers.bluemap.rule=Host(`${BLUEMAP_HOST:-bluemap.mc.dansplugins.localhost}`)"
       - "traefik.http.routers.bluemap.entrypoints=websecure"
       - "traefik.http.routers.bluemap.tls.certresolver=letsencrypt"
       - "traefik.http.services.bluemap.loadbalancer.server.port=8100"

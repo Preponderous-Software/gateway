@@ -30,7 +30,7 @@ entryPoints:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: your-email@example.com  # Replace with your email
+      email: ${ACME_EMAIL:-your-email@example.com}  # Now using environment variable
       storage: acme.json
       tlsChallenge: {}  # Using TLS-ALPN challenge
       # For testing, uncomment the following to use the staging server

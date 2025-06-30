@@ -1,5 +1,6 @@
 # Preponderous Software Gateway
 A microservices gateway infrastructure using Traefik for routing and service discovery. This project provides a scalable foundation for Preponderous Software's microservices architecture.
+
 ## Features
 - Traefik reverse proxy with automatic routing
 - HTTPS support with automatic certificate management
